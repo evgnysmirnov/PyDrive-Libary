@@ -1,11 +1,18 @@
+'''
+задание python:
+1. я програмно задаю название папок(пусть это будет масив с папками). Те папки что есть в масиве нужно удалить на моем гугл драйве.
+усложнение: сделать 2 массива в одном я задаю название папок которые будут удаляться, во 2-м массиве я
+задаю название папок в котором будут удаляться только ФАЙЛЫ не папки
+библиотеки для работы с гугл драйвом: pydrive
+'''
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
 
 class DriveFolder:
     i = 0
-    filesName = ['Folder1', 'Folder2','Folder3', 'Folder4','Folder5']  # for CreateFiles() #TODO
-    objectsToDelete = ['Folder2','Folder2','Folder3', 'Folder4','Folder5', 'file1.txt']
+    filesName = ['file1.txt','file2.txt','file3.txt','file3.txt','file4.txt','file5.txt']  # for CreateFiles() #TODO
+    objectsToDelete = ['Folder1']
     driveFilesCouter = len(objectsToDelete)
 
     def __init__(self):
@@ -37,7 +44,7 @@ class DriveFolder:
 
     def CreateFiles(self, folderid):  # Создание и загрузка файла в текущуюю папку
         file1 = self.drive.CreateFile(
-            {"title": self.filesName[self.i] + ".txt", "parents": [{"kind": "drive#fileLink", "id": self.folderid}]})
+            {"title": self.filesName[self.i], "parents": [{"kind": "drive#fileLink", "id": self.folderid}]})
         file1.SetContentString('Hello World!')
         file1.Upload()  # Upload the file.
         self.i = self.i + 1
@@ -48,10 +55,8 @@ class DriveFolder:
             #print('Received %s files from Files.list()' % len(file_list))
             for file1 in file_list:
                 #print('title: %s, id: %s' % (file1['title'], file1['id']))
-                #for j in range(self.driveFilesCouter):
-                    #print(file1['title'] + " " + self.objectsToDelete[j])
+                #print(file1['title'] + " " + self.objectsToDelete[j])
                 if file1['title'] in self.objectsToDelete:
-                    #self.auth.service.files().delete(fileId=file1['id']).execute()
                     file1.Delete()
                     print('title: %s, id: %s' % (file1['title'], file1['id']))
                     print('has been delete')
